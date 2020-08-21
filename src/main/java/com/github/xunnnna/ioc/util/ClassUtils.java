@@ -1,7 +1,7 @@
 package com.github.xunnnna.ioc.util;
 
 import com.github.xunnnna.ioc.exception.IocRuntimeException;
-import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 
 /**
  * Created by zhutingxuan on 2020/8/20.
@@ -21,10 +21,8 @@ public final class ClassUtils {
     /**
      * 获取类信息
      */
-    public static Class getClass(final String className) {
-        if (StringUtils.isBlank(className)) {
-            throw new IllegalArgumentException("className cannot be empty");
-        }
+    public static Class<?> getClass(final String className) {
+        Assert.assertNotNull("className", className);
         try {
             return currentClassLoader().loadClass(className);
         } catch (ClassNotFoundException e) {
@@ -32,7 +30,7 @@ public final class ClassUtils {
         }
     }
 
-    public static Object newInstance(final Class clazz) {
+    public static Object newInstance(final Class<?> clazz) {
         try {
             return clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
