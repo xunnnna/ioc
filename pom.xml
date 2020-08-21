@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <hell.version>1.0-SNAPSHOT</hell.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <commons-collections.version>3.2.1</commons-collections.version>
         <jackson-databind.version>2.10.2</jackson-databind.version>
@@ -19,6 +20,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.xunnnna</groupId>
+            <artifactId>hell</artifactId>
+            <version>${hell.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

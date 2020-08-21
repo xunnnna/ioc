@@ -1,22 +1,25 @@
 package com.github.xunnnna.ioc.core.impl;
 
+import com.github.xunnnna.hell.support.tuple.impl.Pair;
 import com.github.xunnnna.ioc.constant.enums.ScopeEnum;
 import com.github.xunnnna.ioc.core.BeanFactory;
 import com.github.xunnnna.ioc.exception.IocRuntimeException;
 import com.github.xunnnna.ioc.model.BeanDefinition;
+import com.github.xunnnna.ioc.support.lifecycle.DisposableBean;
+import com.github.xunnnna.ioc.support.lifecycle.InitializingBean;
+import com.github.xunnnna.ioc.support.lifecycle.destory.DefaultPreDestroyBean;
+import com.github.xunnnna.ioc.support.lifecycle.init.DefaultPostConstructBean;
 import com.github.xunnnna.ioc.util.ClassUtils;
 import org.junit.Assert;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 默认工厂接口
  * Created by zhutingxuan on 2020/8/20.
  */
-public class DefaultBeanFactory implements BeanFactory {
+public class DefaultBeanFactory implements BeanFactory, DisposableBean {
 
     /**
      * bean信息 map
@@ -29,17 +32,29 @@ public class DefaultBeanFactory implements BeanFactory {
     private final Map<String, Object> beanMap = new ConcurrentHashMap<>();
 
     /**
-     * bean类型map
+     * 类型集合
+     * （1）主要是为了 type 类型，获取对应的信息为做准备
+     * （2）考虑到懒加载的处理。
+     * @see #getBean(String, Class) 获取对应对象信息
      */
     private final Map<Class<?>, Set<String>> typeBeanNameMap = new ConcurrentHashMap<>();
+
+    /**
+     * 实例于 bean 定义信息 map
+     */
+    private final List<Pair<Object, BeanDefinition>> instanceBeanDefinitionList = new ArrayList<>();
 
     /**
      * 注册对象定义信息
      */
     protected void registerBeanDefinition(final String beanName, final BeanDefinition beanDefinition) {
+        Assert.assertNotNull("beanName", beanName);
+        Assert.assertNotNull("beanDefinition", beanDefinition);
+
         this.beanDefinitionMap.put(beanName, beanDefinition);
         // 注册类型beanName
-        registerTypeBeanNames(beanDefinition);
+        this.registerTypeBeanNames(beanDefinition);
+
         //3. 初始化 bean 信息
         final boolean lazyInit = beanDefinition.getLazyInit();
         if (!lazyInit) {
@@ -92,10 +107,33 @@ public class DefaultBeanFactory implements BeanFactory {
         }
     }
 
+    /**
+     * 根据对象定义信息创建对象
+     * （1）注解 {@link javax.annotation.PostConstruct}
+     * （2）添加 {@link com.github.xunnnna.ioc.support.lifecycle.InitializingBean} 初始化相关处理
+     * （3）添加 {@link BeanDefinition#getInitialize()} 初始化相关处理
+     *
+     * @param beanDefinition 对象定义信息
+     * @return 创建的对象信息
+     */
     private Object createBean(final BeanDefinition beanDefinition) {
         String className = beanDefinition.getClassName();
         Class<?> clazz = ClassUtils.getClass(className);
-        return ClassUtils.newInstance(clazz);
+        Object instance = ClassUtils.newInstance(clazz);
+
+        //1. 初始化相关处理
+        //1.1 直接根据构造器
+        //1.2 根据构造器，属性，静态方法
+        //1.3 根据注解处理相关信息
+
+        //2. 初始化完成之后的调用
+        InitializingBean initializingBean = new DefaultPostConstructBean(instance, beanDefinition);
+        initializingBean.initialize();
+        //2.1 将初始化的信息加入列表中，便于后期销毁使用
+        Pair<Object, BeanDefinition> pair = Pair.of(instance, beanDefinition);
+        instanceBeanDefinitionList.add(pair);
+
+        return instance;
     }
 
     @Override
@@ -130,12 +168,21 @@ public class DefaultBeanFactory implements BeanFactory {
      * 根据类型获取对应的属性名称
      * @param requiredType 需求类型
      * @return bean 名称列表
-     * @since 0.0.2
      */
     Set<String> getBeanNames(final Class<?> requiredType) {
         Assert.assertNotNull("requiredType", requiredType);
         return typeBeanNameMap.get(requiredType);
     }
 
+    @Override
+    public void destroy() {
+        // 销毁所有的属性信息
+        System.out.println("destroy all beans start");
+        for(Pair<Object, BeanDefinition> entry : instanceBeanDefinitionList) {
+            DisposableBean disposableBean = new DefaultPreDestroyBean(entry.getValueOne(), entry.getValueTwo());
+            disposableBean.destroy();
+        }
+        System.out.println("destroy all beans end");
+    }
 
 }

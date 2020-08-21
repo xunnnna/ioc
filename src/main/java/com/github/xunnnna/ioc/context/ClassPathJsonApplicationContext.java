@@ -3,10 +3,10 @@ package com.github.xunnnna.ioc.context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.xunnnna.ioc.core.impl.DefaultBeanFactory;
 import com.github.xunnnna.ioc.core.impl.DefaultListableBeanFactory;
 import com.github.xunnnna.ioc.exception.IocRuntimeException;
-import com.github.xunnnna.ioc.model.DefaultBeanDefinition;
+import com.github.xunnnna.ioc.model.BeanDefinition;
+import com.github.xunnnna.ioc.model.impl.DefaultBeanDefinition;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,29 +16,34 @@ import java.util.List;
 /**
  * Created by zhutingxuan on 2020/8/20.
  */
-public class ClassPathJsonApplicationContext extends DefaultListableBeanFactory {
+public class ClassPathJsonApplicationContext extends AbstractApplicationContext {
 
     private final String fileName;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ClassPathJsonApplicationContext(String fileName) {
         this.fileName = fileName;
-        init();
+        super.init();
     }
 
+
     /**
-     * 初始化加载Json
+     * 构建对象属性列表
+     * @return
      */
-    private void init() {
+    @Override
+    protected List<? extends BeanDefinition> buildBeanDefinitionList() {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
         String json = getJson(is);
+        List<DefaultBeanDefinition> list;
         try {
-            List<DefaultBeanDefinition> list = objectMapper.readValue(json, new TypeReference<List<DefaultBeanDefinition>>(){});
-            list.forEach(beanDefinition -> super.registerBeanDefinition(beanDefinition.getName(), beanDefinition));
+            list = objectMapper.readValue(json, new TypeReference<List<DefaultBeanDefinition>>(){});
         } catch (JsonProcessingException e) {
             throw new IocRuntimeException(e);
         }
+        return list;
     }
+
 
     private String getJson(InputStream inputStream) {
         try {

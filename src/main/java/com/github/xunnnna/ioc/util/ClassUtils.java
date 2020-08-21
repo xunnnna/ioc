@@ -1,7 +1,13 @@
 package com.github.xunnnna.ioc.util;
 
 import com.github.xunnnna.ioc.exception.IocRuntimeException;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Assert;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Optional;
 
 /**
  * Created by zhutingxuan on 2020/8/20.
@@ -37,6 +43,25 @@ public final class ClassUtils {
             throw new IocRuntimeException(e);
         }
 
+    }
+
+    /**
+     * 获取指定注解的方法
+     * @param tCLass
+     * @param annotationClass
+     * @return
+     */
+    public static Optional<Method> getMethodOptional(final Class<?> tCLass, final Class<? extends Annotation> annotationClass) {
+        final Method[] methods = tCLass.getMethods();
+        if (ArrayUtils.isEmpty(methods)) {
+            return Optional.empty();
+        }
+        for(Method method : methods) {
+            if(method.isAnnotationPresent(annotationClass)) {
+                return Optional.of(method);
+            }
+        }
+        return Optional.empty();
     }
 
 }

@@ -1,6 +1,6 @@
-package com.github.xunnnna.ioc.model;
+package com.github.xunnnna.ioc.model.impl;
 
-import com.github.xunnnna.ioc.constant.enums.ScopeEnum;
+import com.github.xunnnna.ioc.model.BeanDefinition;
 
 /**
  * 默认对象定义属性
@@ -15,6 +15,16 @@ public class DefaultBeanDefinition implements BeanDefinition {
     private String scope;
 
     private boolean lazyInit;
+
+    /**
+     * 初始化方法信息
+     */
+    private String initialize;
+
+    /**
+     * 销毁方法
+     */
+    private String destroy;
 
     @Override
     public String getName() {
@@ -46,6 +56,7 @@ public class DefaultBeanDefinition implements BeanDefinition {
         this.scope = scope;
     }
 
+    @Override
     public boolean getLazyInit() {
         return lazyInit;
     }
@@ -53,5 +64,25 @@ public class DefaultBeanDefinition implements BeanDefinition {
     @Override
     public void setLazyInit(boolean lazyInit) {
         this.lazyInit = lazyInit;
+    }
+
+    @Override
+    public void setInitialize(String initialize) {
+        this.initialize = initialize;
+    }
+
+    @Override
+    public String getInitialize() {
+        return initialize;
+    }
+
+    @Override
+    public void setDestroy(String destroy) {
+        this.destroy = destroy;
+    }
+
+    @Override
+    public String getDestroy() {
+        return destroy;
     }
 }
