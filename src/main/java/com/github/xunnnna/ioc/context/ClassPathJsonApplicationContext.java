@@ -3,7 +3,6 @@ package com.github.xunnnna.ioc.context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.xunnnna.ioc.core.impl.DefaultListableBeanFactory;
 import com.github.xunnnna.ioc.exception.IocRuntimeException;
 import com.github.xunnnna.ioc.model.BeanDefinition;
 import com.github.xunnnna.ioc.model.impl.DefaultBeanDefinition;

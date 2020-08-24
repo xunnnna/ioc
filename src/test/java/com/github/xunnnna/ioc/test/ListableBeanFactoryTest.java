@@ -2,6 +2,7 @@ package com.github.xunnnna.ioc.test;
 
 import com.github.xunnnna.ioc.context.ClassPathJsonApplicationContext;
 import com.github.xunnnna.ioc.core.ListableBeanFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
@@ -14,8 +15,7 @@ import static org.junit.Assert.*;
  */
 public class ListableBeanFactoryTest {
 
-    private final ListableBeanFactory BEAN_FACTORY = new ClassPathJsonApplicationContext("apples.json");
-
+    private static final ListableBeanFactory BEAN_FACTORY = new ClassPathJsonApplicationContext("apples.json");
 
     @Test
     public void getBeans() {
@@ -23,4 +23,11 @@ public class ListableBeanFactoryTest {
         apples.get(0).eat();
         apples.get(1).eat();
     }
+
+    @Test
+    public void getBeanByName() {
+        Apple apples = (Apple) BEAN_FACTORY.getBean("apple2");
+        apples.eat();
+    }
+
 }

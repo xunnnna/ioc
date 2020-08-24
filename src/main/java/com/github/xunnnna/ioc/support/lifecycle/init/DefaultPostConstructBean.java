@@ -44,11 +44,8 @@ public class DefaultPostConstructBean implements InitializingBean {
 
     @Override
     public void initialize() {
-
         postConstruct();
-
         initializingBean();
-
         customInit();
     }
 
