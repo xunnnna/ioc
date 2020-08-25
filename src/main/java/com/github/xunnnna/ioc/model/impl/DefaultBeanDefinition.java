@@ -2,6 +2,8 @@ package com.github.xunnnna.ioc.model.impl;
 
 import com.github.xunnnna.ioc.model.BeanDefinition;
 
+import java.util.List;
+
 /**
  * 默认对象定义属性
  * Created by zhutingxuan on 2020/8/20.
@@ -25,6 +27,16 @@ public class DefaultBeanDefinition implements BeanDefinition {
      * 销毁方法
      */
     private String destroy;
+
+    /**
+     * 工厂方法
+     */
+    private String factoryMethod;
+
+    /**
+     * 构造器参数
+     */
+    private List<DefaultConstructorArgDefinition> constructorArgList;
 
     @Override
     public String getName() {
@@ -84,5 +96,25 @@ public class DefaultBeanDefinition implements BeanDefinition {
     @Override
     public String getDestroy() {
         return destroy;
+    }
+
+    @Override
+    public void setFactoryMethod(String factoryMethod) {
+        this.factoryMethod = factoryMethod;
+    }
+
+    @Override
+    public String getFactoryMethod() {
+        return factoryMethod;
+    }
+
+    @Override
+    public List<DefaultConstructorArgDefinition> getConstructorArgList() {
+        return constructorArgList;
+    }
+
+    @Override
+    public void setConstructorArgList(List<DefaultConstructorArgDefinition> constructorArgList) {
+        this.constructorArgList = constructorArgList;
     }
 }

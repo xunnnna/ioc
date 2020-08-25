@@ -2,6 +2,7 @@ package com.github.xunnnna.ioc.test;
 
 import com.github.xunnnna.ioc.context.ClassPathJsonApplicationContext;
 import com.github.xunnnna.ioc.core.BeanFactory;
+import com.github.xunnnna.ioc.test.service.Apple;
 import org.junit.Test;
 
 

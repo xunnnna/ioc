@@ -1,6 +1,8 @@
 package com.github.xunnnna.ioc.model;
 
-import com.github.xunnnna.ioc.constant.enums.ScopeEnum;
+import com.github.xunnnna.ioc.model.impl.DefaultConstructorArgDefinition;
+
+import java.util.List;
 
 /**
  * 对象定义属性
@@ -63,5 +65,29 @@ public interface BeanDefinition {
      * @return 销毁
      */
     String getDestroy();
+
+    /**
+     * 工厂类方法
+     * @param factoryMethod 工厂类方法
+     */
+    void setFactoryMethod(final String factoryMethod);
+
+    /**
+     * 获取工厂类方法名称
+     * @return 工厂类方法名称
+     */
+    String getFactoryMethod();
+
+    /**
+     * 构造器参数列表
+     * @return 构造器参数列表
+     */
+    List<DefaultConstructorArgDefinition> getConstructorArgList();
+
+    /**
+     * 设置构造器参数定义列表
+     * @param constructorArgList 构造器参数列表
+     */
+    void setConstructorArgList(final List<DefaultConstructorArgDefinition> constructorArgList);
 
 }

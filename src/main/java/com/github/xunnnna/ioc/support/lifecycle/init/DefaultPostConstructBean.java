@@ -6,6 +6,7 @@ import com.github.xunnnna.ioc.support.lifecycle.InitializingBean;
 import com.github.xunnnna.ioc.util.ClassUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
@@ -33,12 +34,20 @@ public class DefaultPostConstructBean implements InitializingBean {
     private final Object instance;
 
     /**
+     * 实例类型信息
+     */
+    private final Class<?> instanceClass;
+
+    /**
      * 对象属性定义
      */
     private final BeanDefinition beanDefinition;
 
     public DefaultPostConstructBean(Object instance, BeanDefinition beanDefinition) {
+        Assert.assertNotNull("instance", instance);
+        Assert.assertNotNull("beanDefinition", beanDefinition);
         this.instance = instance;
+        this.instanceClass = instance.getClass();
         this.beanDefinition = beanDefinition;
     }
 
@@ -53,7 +62,7 @@ public class DefaultPostConstructBean implements InitializingBean {
      * 注解处理
      */
     private void postConstruct() {
-        Optional<Method> methodOptional = ClassUtils.getMethodOptional(instance.getClass(), PostConstruct.class);
+        Optional<Method> methodOptional = ClassUtils.getMethodOptional(instanceClass, PostConstruct.class);
 
         methodOptional.ifPresent(method -> {
             //1. 信息校验
@@ -87,7 +96,7 @@ public class DefaultPostConstructBean implements InitializingBean {
         String initName = beanDefinition.getInitialize();
         if (StringUtils.isNotEmpty(initName)) {
             try {
-                Method method = instance.getClass().getMethod(initName);
+                Method method = instanceClass.getMethod(initName);
                 method.invoke(instance);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 throw new IocRuntimeException(e);

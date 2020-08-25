@@ -2,10 +2,9 @@ package com.github.xunnnna.ioc.test;
 
 import com.github.xunnnna.ioc.context.ClassPathJsonApplicationContext;
 import com.github.xunnnna.ioc.core.BeanFactory;
+import com.github.xunnnna.ioc.test.service.Apple;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by zhutingxuan on 2020/8/21.

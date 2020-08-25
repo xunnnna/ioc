@@ -1,4 +1,4 @@
-package com.github.xunnnna.ioc.test;
+package com.github.xunnnna.ioc.test.service;
 
 import com.github.xunnnna.ioc.support.lifecycle.DisposableBean;
 import com.github.xunnnna.ioc.support.lifecycle.InitializingBean;
@@ -33,5 +33,13 @@ public class Apple implements InitializingBean, DisposableBean {
     @PreDestroy
     public void preDestroy() {
         System.out.println("apple preDestroy");
+    }
+
+    public void customInitialize() {
+        System.out.println("apple customInitialize");
+    }
+
+    public void customDestroy() {
+        System.out.println("apple customDestroy");
     }
 }

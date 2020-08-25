@@ -7,6 +7,7 @@ import com.github.xunnnna.ioc.exception.IocRuntimeException;
 import com.github.xunnnna.ioc.model.BeanDefinition;
 import com.github.xunnnna.ioc.support.lifecycle.DisposableBean;
 import com.github.xunnnna.ioc.support.lifecycle.InitializingBean;
+import com.github.xunnnna.ioc.support.lifecycle.create.DefaultNewInstanceBean;
 import com.github.xunnnna.ioc.support.lifecycle.destory.DefaultPreDestroyBean;
 import com.github.xunnnna.ioc.support.lifecycle.init.DefaultPostConstructBean;
 import com.github.xunnnna.ioc.util.ClassUtils;
@@ -92,7 +93,7 @@ public class DefaultBeanFactory implements BeanFactory, DisposableBean {
     }
 
     @Override
-    public Object getBean(final String beanName) {
+    public Object  getBean(final String beanName) {
         Assert.assertNotNull("beanName", beanName);
         //获取配置信息
         BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
@@ -113,15 +114,21 @@ public class DefaultBeanFactory implements BeanFactory, DisposableBean {
      * （2）添加 {@link com.github.xunnnna.ioc.support.lifecycle.InitializingBean} 初始化相关处理
      * （3）添加 {@link BeanDefinition#getInitialize()} 初始化相关处理
      *
+     * TODO:
+     * 1. 后期添加关于构造器信息的初始化
+     * 2. 添加对应的 BeanPostProcessor
+     *
+     * 如果想使用注解相关信息，考虑实现 AnnotationBeanDefinition 统一处理注解信息。
+     * 本期暂时忽略 (1)
+     *
      * @param beanDefinition 对象定义信息
      * @return 创建的对象信息
      */
     private Object createBean(final BeanDefinition beanDefinition) {
-        String className = beanDefinition.getClassName();
-        Class<?> clazz = ClassUtils.getClass(className);
-        Object instance = ClassUtils.newInstance(clazz);
 
         //1. 初始化相关处理
+        Object instance = DefaultNewInstanceBean.getInstance()
+                .newInstance(this, beanDefinition);
         //1.1 直接根据构造器
         //1.2 根据构造器，属性，静态方法
         //1.3 根据注解处理相关信息

@@ -33,12 +33,18 @@ public class DefaultPreDestroyBean implements DisposableBean {
     private final Object instance;
 
     /**
+     * 实例类型信息
+     */
+    private final Class<?> instanceClass;
+
+    /**
      * 对象属性定义
      */
     private final BeanDefinition beanDefinition;
 
     public DefaultPreDestroyBean(Object instance, BeanDefinition beanDefinition) {
         this.instance = instance;
+        this.instanceClass = instance.getClass();
         this.beanDefinition = beanDefinition;
     }
 
@@ -55,7 +61,7 @@ public class DefaultPreDestroyBean implements DisposableBean {
      * 注解处理
      */
     private void preDestroy() {
-        Optional<Method> methodOptional = ClassUtils.getMethodOptional(instance.getClass(), PreDestroy.class);
+        Optional<Method> methodOptional = ClassUtils.getMethodOptional(instanceClass, PreDestroy.class);
         methodOptional.ifPresent(method -> {
             //1. 信息校验
             Class<?>[] paramTypes = method.getParameterTypes();
@@ -88,7 +94,7 @@ public class DefaultPreDestroyBean implements DisposableBean {
         String destroyName = beanDefinition.getDestroy();
         if(StringUtils.isNotEmpty(destroyName)) {
             try {
-                Method method = instance.getClass().getMethod(destroyName);
+                Method method = instanceClass.getMethod(destroyName);
                 method.invoke(instance);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 throw new IocRuntimeException(e);
