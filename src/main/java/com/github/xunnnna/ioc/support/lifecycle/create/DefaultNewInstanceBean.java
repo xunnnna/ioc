@@ -3,6 +3,7 @@ package com.github.xunnnna.ioc.support.lifecycle.create;
 import com.github.xunnnna.ioc.core.BeanFactory;
 import com.github.xunnnna.ioc.model.BeanDefinition;
 import com.github.xunnnna.ioc.support.lifecycle.NewInstanceBean;
+import com.github.xunnnna.ioc.support.lifecycle.property.impl.DefaultBeanPropertyProcessor;
 
 /**
  * 默认新建对象实例的实现
@@ -32,6 +33,9 @@ public class DefaultNewInstanceBean implements NewInstanceBean {
             //2. 构造器
             instance = ConstructorNewInstanceBean.getInstance().newInstance(beanFactory, beanDefinition);
         }
+        //3. 属性设置
+        //todo 这时候还不能设置其他ioc管理的bean
+        DefaultBeanPropertyProcessor.getInstance().propertyProcessor(beanFactory, instance, beanDefinition.getPropertyArgList());
         return instance;
     }
 }

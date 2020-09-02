@@ -23,4 +23,5 @@ public class DefaultListableBeanFactory extends DefaultBeanFactory implements Li
         }
         return beanNames.stream().map(beanName -> super.getBean(beanName, requireType)).collect(Collectors.toList());
     }
+
 }

@@ -1,7 +1,5 @@
 package com.github.xunnnna.ioc.model;
 
-import com.github.xunnnna.ioc.model.impl.DefaultConstructorArgDefinition;
-
 import java.util.List;
 
 /**
@@ -82,12 +80,24 @@ public interface BeanDefinition {
      * 构造器参数列表
      * @return 构造器参数列表
      */
-    List<DefaultConstructorArgDefinition> getConstructorArgList();
+    List<ConstructorArgDefinition> getConstructorArgList();
 
     /**
      * 设置构造器参数定义列表
      * @param constructorArgList 构造器参数列表
      */
-    void setConstructorArgList(final List<DefaultConstructorArgDefinition> constructorArgList);
+    void setConstructorArgList(final List<ConstructorArgDefinition> constructorArgList);
+
+    /**
+     * 属性参数列表
+     * @return 属性器参数列表
+     */
+    List<PropertyArgDefinition> getPropertyArgList();
+
+    /**
+     * 设置属性参数定义列表
+     * @param propertyArgList 属性参数列表
+     */
+    void setPropertyArgList(final List<PropertyArgDefinition> propertyArgList);
 
 }

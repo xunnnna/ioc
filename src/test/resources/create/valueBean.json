@@ -1,0 +1,8 @@
+[
+  {"name":"four","className":"com.github.xunnnna.ioc.test.service.Wheel",
+    "propertyArgList": [{"name": "amount", "type": "java.lang.Integer", "value": 4}]},
+{"name":"car","className":"com.github.xunnnna.ioc.test.service.Car",
+  "propertyArgList": [{"name": "color", "type": "java.lang.String", "value": "red"}]},
+  {"name":"carWithWheel","className":"com.github.xunnnna.ioc.test.service.Car",
+    "propertyArgList": [{"name": "color", "type": "java.lang.String", "value": "red"},{"name": "wheel","ref": "four"}]}
+]

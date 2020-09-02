@@ -52,7 +52,7 @@ public class ConstructorNewInstanceBean extends AbstractNewInstanceBean {
      */
     @Override
     protected Optional<Object> newInstanceOpt(BeanFactory beanFactory, BeanDefinition beanDefinition, Class<?> beanClass) {
-        final List<DefaultConstructorArgDefinition> argDefinitionList = beanDefinition.getConstructorArgList();
+        final List<ConstructorArgDefinition> argDefinitionList = beanDefinition.getConstructorArgList();
         //1. 无参
         if (CollectionUtils.isEmpty(argDefinitionList)) {
             return newInstanceOpt(beanClass);
@@ -80,7 +80,7 @@ public class ConstructorNewInstanceBean extends AbstractNewInstanceBean {
      */
     private Optional<Object> newInstanceOpt(final BeanFactory beanFactory,
                                             final Class<?> beanClass,
-                                            final List<DefaultConstructorArgDefinition> argDefinitionList) {
+                                            final List<ConstructorArgDefinition> argDefinitionList) {
         Pair<Class<?>[], Object[]> pair = getParamsPair(beanFactory, argDefinitionList);
         Constructor<?> constructor = ClassUtils.getConstructor(beanClass, pair.getValueOne());
         Object instance = ClassUtils.newInstance(constructor, pair.getValueTwo());
@@ -101,7 +101,7 @@ public class ConstructorNewInstanceBean extends AbstractNewInstanceBean {
      * @return pair 信息
      */
     private Pair<Class<?>[], Object[]> getParamsPair(final BeanFactory beanFactory,
-                                                  final List<DefaultConstructorArgDefinition> argDefinitionList) {
+                                                  final List<ConstructorArgDefinition> argDefinitionList) {
         final int size = argDefinitionList.size();
         Class<?>[] types = new Class[size];
         Object[] values = new Object[size];

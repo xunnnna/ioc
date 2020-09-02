@@ -1,5 +1,8 @@
 package com.github.xunnnna.ioc.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.github.xunnnna.ioc.model.impl.DefaultConstructorArgDefinition;
+
 /**
  * 构造器参数定义信息
  *
@@ -21,6 +24,7 @@ package com.github.xunnnna.ioc.model;
  *
  * Created by zhutingxuan on 2020/8/24.
  */
+@JsonDeserialize(as = DefaultConstructorArgDefinition.class)
 public interface ConstructorArgDefinition {
 
     /**

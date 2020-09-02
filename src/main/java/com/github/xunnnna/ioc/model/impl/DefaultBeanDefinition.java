@@ -1,6 +1,8 @@
 package com.github.xunnnna.ioc.model.impl;
 
 import com.github.xunnnna.ioc.model.BeanDefinition;
+import com.github.xunnnna.ioc.model.ConstructorArgDefinition;
+import com.github.xunnnna.ioc.model.PropertyArgDefinition;
 
 import java.util.List;
 
@@ -36,7 +38,13 @@ public class DefaultBeanDefinition implements BeanDefinition {
     /**
      * 构造器参数
      */
-    private List<DefaultConstructorArgDefinition> constructorArgList;
+    private List<ConstructorArgDefinition> constructorArgList;
+
+    /**
+     * 属性参数列表
+     * @since 0.0.7
+     */
+    private List<PropertyArgDefinition> propertyArgList;
 
     @Override
     public String getName() {
@@ -109,12 +117,24 @@ public class DefaultBeanDefinition implements BeanDefinition {
     }
 
     @Override
-    public List<DefaultConstructorArgDefinition> getConstructorArgList() {
+    public List<ConstructorArgDefinition> getConstructorArgList() {
         return constructorArgList;
     }
 
     @Override
-    public void setConstructorArgList(List<DefaultConstructorArgDefinition> constructorArgList) {
+    public void setConstructorArgList(List<ConstructorArgDefinition> constructorArgList) {
         this.constructorArgList = constructorArgList;
     }
+
+    @Override
+    public List<PropertyArgDefinition> getPropertyArgList() {
+        return propertyArgList;
+    }
+
+    @Override
+    public void setPropertyArgList(List<PropertyArgDefinition> propertyArgList) {
+        this.propertyArgList = propertyArgList;
+    }
+
+
 }

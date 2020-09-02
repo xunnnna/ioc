@@ -2,6 +2,7 @@ package com.github.xunnnna.ioc.util;
 
 import com.github.xunnnna.ioc.exception.IocRuntimeException;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 
 import java.lang.reflect.InvocationTargetException;
@@ -67,5 +68,31 @@ public final class ReflectMethodUtils {
         return ReflectMethodUtils.invoke(null, factoryMethod);
 
     }
+
+    /***
+     * 调用 setter 方法，进行设置值
+     */
+    public static void invokeSetterMethod(final Object instance, final String propertyName, final Object value) {
+        Assert.assertNotNull("instance", instance);
+        Assert.assertNotNull("propertyName", propertyName);
+
+        if (value == null) return;
+
+        final Class<?> clazz = instance.getClass();
+        String first = propertyName.substring(0, 1);
+        String other = propertyName.substring(1);
+        String setMethodName = "set" + StringUtils.upperCase(first) + other;
+
+        final Class<?> paramType = value.getClass();
+
+        try {
+            Method method = clazz.getMethod(setMethodName, paramType);
+            method.invoke(instance, value);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new IocRuntimeException(e);
+        }
+    }
+
+
 
 }
